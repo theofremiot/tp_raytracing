@@ -63,25 +63,6 @@ bool plane::intersect(ray const& ray_param,intersection_data& intersection) cons
         }
     }
 
-    // ********************************************************** //
-    // ********************************************************** //
-    //  TO DO:
-    //    Calcul d'intersection entre un rayon et un plan
-    //
-    // Variables:
-    //  - Position initiale du rayon: ray_param.p0()
-    //  - Vecteur directeur unitaire du rayon: u
-    //  - Position d'un point du plan: position_data
-    //  - Normale unitaire au plan: n
-    //
-    // Aide de syntaxe:
-    //  - Calcul du produit scalaire <a,b>: dot(a,b);
-    //  - Mise a jour de la donnee d'intersection:
-    //                intersection.set(p_inter,n_inter,t_inter);
-    //
-    // ********************************************************** //
-    // ********************************************************** //
-
 }
 
 }

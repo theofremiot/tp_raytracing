@@ -45,6 +45,62 @@ bool sphere::intersect(ray const& ray_param,intersection_data& intersection) con
 
     vec3 const& u = ray_param.u();
 
+    // definition des coefficient de l'equation du seconde degre
+    float a = dot(u,u);
+    float b = 2 * dot(u, ray_param.p0()-center_data);
+    float c = dot(ray_param.p0()-center_data, ray_param.p0()-center_data) - radius_data * radius_data;
+
+    // discriminant
+    float delta = b*b - 4*a*c;
+
+    float t_inter;
+
+    if (delta<0){
+        return false;
+    }
+    else if(delta==0){
+        t_inter = - b/(2*a);
+        if (t_inter>0){
+            vec3 const p_inter = ray_param.p0() + t_inter*u;
+            vec3 const n_inter = (p_inter-center_data)/radius_data;
+            intersection.set(p_inter,n_inter,t_inter);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    else if (delta>0){
+
+        float x1 = (-b-sqrt(delta))/(2*a);
+        float x2 = (-b+sqrt(delta))/(2*a);
+
+        if (x1>=0 && x2>=0){
+            float t_inter = std::min(x1, x2);
+            if (t_inter>0){
+                vec3 const p_inter = ray_param.p0() + t_inter*u;
+                vec3 const n_inter = (p_inter-center_data)/radius_data;
+                intersection.set(p_inter,n_inter,t_inter);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        else if (x1*x2<0){
+            float t_inter = std::max(x1, x2);
+            if (t_inter>0){
+                vec3 const p_inter = ray_param.p0() + t_inter*u;
+                vec3 const n_inter = (p_inter-center_data)/radius_data;
+                intersection.set(p_inter,n_inter,t_inter);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        else {
+            return false;
+        }
+    }
+
     // ********************************************************** //
     // ********************************************************** //
     //  TO DO:
@@ -62,18 +118,6 @@ bool sphere::intersect(ray const& ray_param,intersection_data& intersection) con
     //
     // ********************************************************** //
     // ********************************************************** //
-
-
-
-    //Le code suivant est arbitraire est doit etre modifie
-    vec3 const& p0 = ray_param.p0();
-    float f=sqrt(4.0f*dot(p0-center_data,u)*dot(p0-1.1f*center_data,u)-3.5f*dot(p0-center_data,p0-center_data));
-    if(f>2.5f)
-    {
-        return true;
-    }
-    return false;
-
 
 }
 
