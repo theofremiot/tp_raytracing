@@ -129,17 +129,25 @@ bool compute_intersection(ray const& r,
 
     bool found_intersection = false;
     int k = 0;
-    while(k<N_primitive && found_intersection==false)
-    {
-        primitive_basic const & primitive = scene.get_primitive(k);
-        bool is_intersection = primitive.intersect(r,intersection);
-        if(is_intersection)
-            found_intersection = true;
-        else
-            ++k;
-    }
-    index_intersected_primitive = k;
 
+    float t_min;
+
+    intersection_data intersection_tmp;
+
+    for(int k=0; k<N_primitive; ++k){
+        primitive_basic const & primitive = scene.get_primitive(k);
+        bool is_intersection = primitive.intersect(r,intersection_tmp);
+        if (is_intersection){
+            if (!found_intersection){
+                intersection = intersection_tmp;
+                found_intersection = true;
+                index_intersected_primitive = k;
+            } else if (intersection_tmp.relative < intersection.relative){
+                intersection = intersection_tmp;
+                index_intersected_primitive = k;
+            }
+        }
+    }
     return found_intersection;
 }
 
